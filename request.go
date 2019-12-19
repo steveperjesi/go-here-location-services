@@ -18,7 +18,7 @@ import (
 	"golang.org/x/image/bmp"
 )
 
-func (h *HereMap) GetMap(request Request) (image.Image, error) {
+func (h *HereMap) GetMap(request *Request) (image.Image, error) {
 	endpoint, _ := url.Parse(HereMapViewBaseAPIURLv1)
 	params := endpoint.Query()
 

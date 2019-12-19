@@ -19,7 +19,7 @@ type Request struct {
 	POILabel        []Label       `json:"poi_label"`
 	PPI             int           `json:"ppi"`
 	TextLabel       []Label       `json:"text_label"`
-	FileType        int           `json:"file_type"`
+	FileType        string        `json:"file_type"`
 	Width           int           `json:"width"`
 	Height          int           `json:"height"`
 	Terrain         int           `json:"terrain"`

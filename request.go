@@ -18,7 +18,7 @@ import (
 	"golang.org/x/image/bmp"
 )
 
-func (h *HereMap) GetMap(request *Request) (image.Image, error) {
+func (h *HereMap) GetMap(request *Request) (image.Image, string, error) {
 	endpoint, _ := url.Parse(HereMapViewBaseAPIURLv1)
 	params := endpoint.Query()
 
@@ -121,8 +121,8 @@ func (h *HereMap) GetMap(request *Request) (image.Image, error) {
 	}
 
 	// File type
-	if request.FileType > 0 {
-		params.Set("f", strconv.Itoa(request.FileType))
+	if request.FileType != "" {
+		params.Set("f", request.FileType)
 	}
 
 	if request.MaxHits > 0 {
@@ -176,7 +176,7 @@ func (h *HereMap) GetMap(request *Request) (image.Image, error) {
 
 	// Sending a valid AppID and AppCode with no other params will result in a successul map of Berlin
 	if len(params) <= 2 {
-		return nil, errors.New("Missing Parameters")
+		return nil, "", errors.New("Missing Parameters")
 	}
 
 	endpoint.RawQuery = params.Encode()
@@ -188,18 +188,18 @@ func (h *HereMap) GetMap(request *Request) (image.Image, error) {
 
 	response, err := client.Get(endpoint.String())
 	if err != nil {
-		return nil, err
+		return nil, "", err
 	}
 
 	defer response.Body.Close()
 
 	if response.StatusCode >= 400 {
-		return nil, errors.New(response.Status)
+		return nil, "", errors.New(response.Status)
 	}
 
 	data, err := ioutil.ReadAll(response.Body)
 	if err != nil {
-		return nil, err
+		return nil, "", err
 	}
 	// fmt.Println("HERECOM MAP RESULT >>>", response.Status, response.Header.Get("Content-Length"), response.Header.Get("Content-Type"), len(data))
 
@@ -210,35 +210,35 @@ func (h *HereMap) GetMap(request *Request) (image.Image, error) {
 			resultImage, err := jpeg.Decode(bytes.NewReader(data))
 			if err != nil {
 				// fmt.Println("ERROR JPEG resultImage", err)
-				return nil, err
+				return nil, "", err
 			}
-			return resultImage, err
+			return resultImage, contentTypes[i], err
 
 		} else if contentTypes[i] == "image/bmp" {
 			resultImage, err := bmp.Decode(bytes.NewReader(data))
 			if err != nil {
 				// fmt.Println("ERROR BMP resultImage", err)
-				return nil, err
+				return nil, "", err
 			}
-			return resultImage, err
+			return resultImage, contentTypes[i], err
 
 		} else if contentTypes[i] == "image/gif" {
 			resultImage, err := gif.Decode(bytes.NewReader(data))
 			if err != nil {
 				// fmt.Println("ERROR GIF resultImage", err)
-				return nil, err
+				return nil, "", err
 			}
-			return resultImage, err
+			return resultImage, contentTypes[i], err
 
 		} else if contentTypes[i] == "image/png" {
 			resultImage, err := png.Decode(bytes.NewReader(data))
 			if err != nil {
 				// fmt.Println("ERROR PNG resultImage", err)
-				return nil, err
+				return nil, "", err
 			}
-			return resultImage, err
+			return resultImage, contentTypes[i], err
 		}
 	}
 
-	return nil, err
+	return nil, "", err
 }

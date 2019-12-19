@@ -45,7 +45,7 @@ func TestHereIfMissing(t *testing.T) {
 	hereMap, err := here.NewHereMap(AppID(), AppCode())
 	assert.NoError(err)
 
-	mapImage, err := hereMap.GetMap(&here.Request{})
+	mapImage, _, err := hereMap.GetMap(&here.Request{})
 	assert.Error(err)
 
 	assert.Nil(mapImage)
@@ -61,7 +61,7 @@ func TestHereLatLongWithZoom(t *testing.T) {
 		Latitude:  DisneylandLatitude,
 		Longitude: DisneylandLongitude,
 	}
-	mapImage, err := hereMap.GetMap(&here.Request{
+	mapImage, _, err := hereMap.GetMap(&here.Request{
 		Point: coords,
 		Zoom:  3,
 	})
@@ -80,7 +80,7 @@ func TestHereLatLongWithPIP(t *testing.T) {
 		Latitude:  DisneylandLatitude,
 		Longitude: DisneylandLongitude,
 	}
-	mapImage, err := hereMap.GetMap(&here.Request{
+	mapImage, _, err := hereMap.GetMap(&here.Request{
 		Point: coords,
 		PIP:   10,
 	})
@@ -99,12 +99,14 @@ func TestHereLatLongForceJpegWithQuality(t *testing.T) {
 		Latitude:  DisneylandLatitude,
 		Longitude: DisneylandLongitude,
 	}
-	mapImage, err := hereMap.GetMap(&here.Request{
+	mapImage, contentType, err := hereMap.GetMap(&here.Request{
 		Point:       coords,
-		FileType:    1,
+		FileType:    "1",
 		JpegQuality: 90,
 	})
 	assert.NoError(err)
+
+	assert.Equal(contentType, "image/jpeg")
 
 	assert.NotNil(mapImage)
 }
@@ -119,11 +121,13 @@ func TestHereLatLongForcePng(t *testing.T) {
 		Latitude:  DisneylandLatitude,
 		Longitude: DisneylandLongitude,
 	}
-	mapImage, err := hereMap.GetMap(&here.Request{
+	mapImage, contentType, err := hereMap.GetMap(&here.Request{
 		Point:    coords,
-		FileType: 0,
+		FileType: "0",
 	})
 	assert.NoError(err)
+
+	assert.Equal(contentType, "image/png")
 
 	assert.NotNil(mapImage)
 }
@@ -138,11 +142,13 @@ func TestHereLatLongForceGif(t *testing.T) {
 		Latitude:  DisneylandLatitude,
 		Longitude: DisneylandLongitude,
 	}
-	mapImage, err := hereMap.GetMap(&here.Request{
+	mapImage, contentType, err := hereMap.GetMap(&here.Request{
 		Point:    coords,
-		FileType: 2,
+		FileType: "2",
 	})
 	assert.NoError(err)
+
+	assert.Equal(contentType, "image/gif")
 
 	assert.NotNil(mapImage)
 }
@@ -157,11 +163,13 @@ func TestHereLatLongForceBmp(t *testing.T) {
 		Latitude:  DisneylandLatitude,
 		Longitude: DisneylandLongitude,
 	}
-	mapImage, err := hereMap.GetMap(&here.Request{
+	mapImage, contentType, err := hereMap.GetMap(&here.Request{
 		Point:    coords,
-		FileType: 3,
+		FileType: "3",
 	})
 	assert.NoError(err)
+
+	assert.Equal(contentType, "image/bmp")
 
 	assert.NotNil(mapImage)
 }
@@ -176,7 +184,7 @@ func TestHereCenterWithStyle(t *testing.T) {
 		Latitude:  DisneylandLatitude,
 		Longitude: DisneylandLongitude,
 	}
-	mapImage, err := hereMap.GetMap(&here.Request{
+	mapImage, _, err := hereMap.GetMap(&here.Request{
 		Center: coords,
 		Style:  "mini",
 	})
@@ -195,7 +203,7 @@ func TestHereTerrainWithViewType(t *testing.T) {
 		Latitude:  DisneylandLatitude,
 		Longitude: DisneylandLongitude,
 	}
-	mapImage, err := hereMap.GetMap(&here.Request{
+	mapImage, _, err := hereMap.GetMap(&here.Request{
 		Center:   coords,
 		Terrain:  8,
 		ViewType: 1,
@@ -215,7 +223,7 @@ func TestHereHeightAndWidth(t *testing.T) {
 		Latitude:  DisneylandLatitude,
 		Longitude: DisneylandLongitude,
 	}
-	mapImage, err := hereMap.GetMap(&here.Request{
+	mapImage, _, err := hereMap.GetMap(&here.Request{
 		Center: coords,
 		Height: 320,
 		Width:  320,
@@ -235,7 +243,7 @@ func TestHereScaleTypeWithMaxHits(t *testing.T) {
 		Latitude:  DisneylandLatitude,
 		Longitude: DisneylandLongitude,
 	}
-	mapImage, err := hereMap.GetMap(&here.Request{
+	mapImage, _, err := hereMap.GetMap(&here.Request{
 		Center:    coords,
 		ScaleType: "m",
 		MaxHits:   1,
@@ -262,7 +270,7 @@ func TestHerePOIWithHiddenMarkers(t *testing.T) {
 
 	poi := []here.Coordinates{coords1, coords2}
 
-	mapImage, err := hereMap.GetMap(&here.Request{
+	mapImage, _, err := hereMap.GetMap(&here.Request{
 		POI:         poi,
 		HideMarkers: 1,
 	})
@@ -288,7 +296,7 @@ func TestHerePOIWithHiddenCompass(t *testing.T) {
 
 	poi := []here.Coordinates{coords1, coords2}
 
-	mapImage, err := hereMap.GetMap(&here.Request{
+	mapImage, _, err := hereMap.GetMap(&here.Request{
 		POI:         poi,
 		HideCompass: true,
 	})
@@ -314,7 +322,7 @@ func TestHerePOIWithPPI(t *testing.T) {
 
 	poi := []here.Coordinates{coords1, coords2}
 
-	mapImage, err := hereMap.GetMap(&here.Request{
+	mapImage, _, err := hereMap.GetMap(&here.Request{
 		POI: poi,
 		PPI: 500,
 	})
@@ -334,7 +342,7 @@ func TestHereCenterWithHideCenterDot(t *testing.T) {
 		Longitude: DisneylandLongitude,
 	}
 
-	mapImage, err := hereMap.GetMap(&here.Request{
+	mapImage, _, err := hereMap.GetMap(&here.Request{
 		Center:        coords,
 		HideCenterDot: true,
 	})
@@ -354,7 +362,7 @@ func TestHereCenterWithNoCroppedLabels(t *testing.T) {
 		Longitude: DisneylandLongitude,
 	}
 
-	mapImage, err := hereMap.GetMap(&here.Request{
+	mapImage, _, err := hereMap.GetMap(&here.Request{
 		Center:          coords,
 		NoCroppedLabels: true,
 	})
@@ -374,7 +382,7 @@ func TestHereCenterWithHideCopyright(t *testing.T) {
 		Longitude: DisneylandLongitude,
 	}
 
-	mapImage, err := hereMap.GetMap(&here.Request{
+	mapImage, _, err := hereMap.GetMap(&here.Request{
 		Center:        coords,
 		HideCopyright: true,
 	})
@@ -396,7 +404,7 @@ func TestHereAddressWithShowAddressAndLanguage(t *testing.T) {
 		ZipCode: "89119",
 		Country: "US",
 	}
-	mapImage, err := hereMap.GetMap(&here.Request{
+	mapImage, _, err := hereMap.GetMap(&here.Request{
 		Address:         address,
 		ShowAddressInfo: true,
 		Language:        "spa",
@@ -423,7 +431,7 @@ func TestHerePointsOfInterest(t *testing.T) {
 
 	poi := []here.Coordinates{coords1, coords2}
 
-	mapImage, err := hereMap.GetMap(&here.Request{
+	mapImage, _, err := hereMap.GetMap(&here.Request{
 		POI: poi,
 	})
 	assert.NoError(err)
@@ -464,7 +472,7 @@ func TestHerePointsOfInterestLabels(t *testing.T) {
 
 	labels := []here.Label{label1, label2}
 
-	mapImage, err := hereMap.GetMap(&here.Request{
+	mapImage, _, err := hereMap.GetMap(&here.Request{
 		POILabel: labels,
 	})
 	assert.NoError(err)
@@ -505,7 +513,7 @@ func TestHereTextLabels(t *testing.T) {
 
 	labels := []here.Label{label1, label2}
 
-	mapImage, err := hereMap.GetMap(&here.Request{
+	mapImage, _, err := hereMap.GetMap(&here.Request{
 		TextLabel: labels,
 	})
 	assert.NoError(err)

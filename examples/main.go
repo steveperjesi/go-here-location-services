@@ -25,7 +25,7 @@ func main() {
 		Style:     "mini",
 	}
 
-	mapImage, err := hereMap.GetMap(request)
+	mapImage, err := hereMap.GetMap(&request)
 	if err != nil {
 		panic(err)
 	}

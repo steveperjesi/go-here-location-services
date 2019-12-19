@@ -14,7 +14,7 @@ https://developer.here.com/documentation/map-image/dev_guide/topics/resource-map
 
 ```HERE_MAP_APP_ID=<YOUR_APP_ID> HERE_MAP_APP_CODE=<YOUR_APP_CODE> go test -v -cover```
 
-_coverage: **90.6%** of statements_
+_coverage: **93.7%** of statements_
 
 Check out some wonderful [examples](https://github.com/steveperjesi/go-here-map/tree/master/examples)
 

@@ -3,7 +3,7 @@ package here
 import (
 	"bytes"
 	"errors"
-	// "fmt"
+	"fmt"
 	"image"
 	"image/gif"
 	"image/jpeg"
@@ -185,6 +185,8 @@ func (h *HereMap) GetMap(request *Request) (image.Image, string, error) {
 	client := http.Client{
 		Timeout: timeout,
 	}
+
+	fmt.Println("REQUEST", endpoint.String())
 
 	response, err := client.Get(endpoint.String())
 	if err != nil {

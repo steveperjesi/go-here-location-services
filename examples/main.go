@@ -19,16 +19,19 @@ func main() {
 	}
 
 	request := here.Request{
-		ScaleType: "m",
-		Center:    center,
-		Zoom:      10,
-		Style:     "mini",
+		ScaleType:         "m",
+		Center:            center,
+		Zoom:              10,
+		Style:             "mini",
+		UncertaintyRadius: 50,
 	}
 
-	mapImage, err := hereMap.GetMap(&request)
+	mapImage, contentType, requestUrl, err := hereMap.GetMap(&request)
 	if err != nil {
 		panic(err)
 	}
 
 	fmt.Println("Map Image Size", mapImage.Bounds().Max.X, mapImage.Bounds().Max.Y)
+	fmt.Println("Map Image Content Type", contentType)
+	fmt.Println("Map Image Request URL", requestUrl)
 }

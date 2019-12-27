@@ -171,6 +171,10 @@ func (h *HereMap) GetMap(request *Request) (image.Image, string, string, error) 
 		params.Set("i", "1")
 	}
 
+	if request.UncertaintyRadius > 0 {
+		params.Set("u", strconv.Itoa(request.UncertaintyRadius))
+	}
+
 	// Sending a valid AppID and AppCode with no other params will result in a successul map of Berlin
 	if len(params) <= 2 {
 		return nil, "", "", errors.New("Missing Parameters")

@@ -532,3 +532,23 @@ func TestHereRequestUrl(t *testing.T) {
 
 	assert.NotNil(requestUrl)
 }
+
+func TestHereUncertaintyRadius(t *testing.T) {
+	assert := assert.New(t)
+
+	hereMap, err := here.NewHereMap(AppID(), AppCode())
+	assert.NoError(err)
+
+	coords := here.Coordinates{
+		Latitude:  DisneylandLatitude,
+		Longitude: DisneylandLongitude,
+	}
+
+	mapImage, _, _, err := hereMap.GetMap(&here.Request{
+		Center:            coords,
+		UncertaintyRadius: 50,
+	})
+	assert.NoError(err)
+
+	assert.NotNil(mapImage)
+}

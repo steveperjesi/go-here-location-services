@@ -121,7 +121,26 @@ func (h *HereMap) GetMap(request *Request) (image.Image, string, string, error) 
 
 	// File type
 	if request.FileType != "" {
-		params.Set("f", request.FileType)
+		// 0 PNG
+		// 1 JPEG (default)
+		// 2 GIF
+		// 3 BMP
+		// 4 PNG8
+		// 5 SVG (only for companylogo)
+		fileType := 1 // default to JPEG
+		switch request.FileType {
+		case "png", "PNG":
+			fileType = 0
+		case "gif", "GIF":
+			fileType = 2
+		case "bmp", "BMP":
+			fileType = 3
+		case "png8", "PNG8":
+			fileType = 4
+		case "svg", "SVG":
+			fileType = 5
+		}
+		params.Set("f", strconv.Itoa(fileType))
 	}
 
 	if request.MaxHits > 0 {

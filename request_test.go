@@ -100,8 +100,8 @@ func TestHereLatLongForceJpegWithQuality(t *testing.T) {
 		Longitude: DisneylandLongitude,
 	}
 	mapImage, contentType, _, err := hereMap.GetMap(&here.Request{
-		Point:       coords,
-		FileType:    "1",
+		Point: coords,
+		// FileType:    "jpg",	// default
 		JpegQuality: 90,
 	})
 	assert.NoError(err)
@@ -123,7 +123,7 @@ func TestHereLatLongForcePng(t *testing.T) {
 	}
 	mapImage, contentType, _, err := hereMap.GetMap(&here.Request{
 		Point:    coords,
-		FileType: "0",
+		FileType: "png",
 	})
 	assert.NoError(err)
 
@@ -144,7 +144,7 @@ func TestHereLatLongForceGif(t *testing.T) {
 	}
 	mapImage, contentType, _, err := hereMap.GetMap(&here.Request{
 		Point:    coords,
-		FileType: "2",
+		FileType: "gif",
 	})
 	assert.NoError(err)
 
@@ -165,7 +165,7 @@ func TestHereLatLongForceBmp(t *testing.T) {
 	}
 	mapImage, contentType, _, err := hereMap.GetMap(&here.Request{
 		Point:    coords,
-		FileType: "3",
+		FileType: "BMP",
 	})
 	assert.NoError(err)
 

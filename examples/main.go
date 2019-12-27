@@ -7,7 +7,8 @@ import (
 )
 
 func main() {
-	hereMap, err := here.NewHereMap("APP_ID", "APP_CODE")
+	// hereMap, err := here.NewHereMap("APP_ID", "APP_CODE")
+	hereMap, err := here.NewHereMap("XuGOCj9KZkqMlMdGCMEn", "RDhXeJATr5vD9WDN-VGZsA")
 	if err != nil {
 		panic(err)
 	}
@@ -24,6 +25,7 @@ func main() {
 		Zoom:              10,
 		Style:             "mini",
 		UncertaintyRadius: 50,
+		FileType:          "png",
 	}
 
 	mapImage, contentType, requestUrl, err := hereMap.GetMap(&request)
